@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chat App</title>
+    <h1>Simple Chat</h1>
+</head>
+<body>
+    <h2>Messaging </h2>
+
+
+    <input type="text" id="message" placeholder="Type a message" />
+    <button id="sendbutton">Send</button>
+    <div id="allmessages"></div>
+
+
+    <!-- we need to install socket.io in frontend code -->
+    <!-- this loads the script generated from : const io = sockserver(server) from backend-->
+    <script src="/socket.io/socket.io.js" ></script>
+
+    <!-- this creates a new scoket everytime we refresh-->
+    <script>
+        const socket = io();
+        const sendbutton= document.getElementById('sendbutton')
+        const msgInput = document.getElementById('message')
+        const allmessages = document.getElementById('allmessages')
+
+        socket.on('message', (message)=>{
+          //  console.log(message)
+
+          // to display all messages on DOM
+          const p = document.createElement('p')
+          p.innerText = message
+          allmessages.appendChild(p)
+        })
+        
+        sendbutton.addEventListener("click", ()=>{
+            const message = msgInput.value  // capturing the message and now we send it to server use emit
+            console.log(message)
+            socket.emit('frontend-msg',message)  // emits event frontend msg
+        })
+    
+    </script>
+    
+</body>
+</html>
+
